@@ -1,4 +1,4 @@
 #Токен бота
 token = 'Ваш токен бота'
 #Username админа
-UserAdmin = 'Ваш userme в Дискорд'
+UserAdmin = 'Ваш username в Дискорд'

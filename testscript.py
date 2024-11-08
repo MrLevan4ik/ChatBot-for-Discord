@@ -31,17 +31,41 @@ async def on_member_join(member):
     await channel.send(embed=embed)
 
 
-CENSORED_WORDS = ["fuck", "fucking", "блять", "пидор", "сука", "хуй", "пизда", "даун", "хуяк", "пиздец", "хуйня",
-"блядь", "ахуеть", "охуенно", "нехуй", "ебать"]
+# Загружаем матерные слова из файлов
+def load_censored_words():
+    censored = set()
+    try:
+        with open("swear-words-english.txt", "r", encoding="utf-8") as eng_file:
+            for line in eng_file:
+                word = line.strip()
+                if word:
+                    censored.add(word.lower())
+    except FileNotFoundError:
+        print("Файл swear-words-english.txt не найден.")
+
+    try:
+        with open("swear-words-russian.txt", "r", encoding="utf-8") as rus_file:
+            for line in rus_file:
+                word = line.strip()
+                if word:
+                    censored.add(word.lower())
+    except FileNotFoundError:
+        print("Файл swear-words-russian.txt не найден.")
+
+    return list(censored)
+
+
+CENSORED_WORDS = load_censored_words()
 
 
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
 
-    for content in message.content.split():
-        for censored_word in CENSORED_WORDS:
-            if content.lower() == censored_word:
+    message_content = message.content.lower().split()
+    for word in message_content:
+        if word in CENSORED_WORDS:
+            try:
                 await message.delete()
                 await message.channel.send(f"{message.author.mention} не выражайся так, будь культурным!")
                 await bot.process_commands(message)
@@ -104,6 +128,9 @@ async def calc(inter, a: int, oper: str, b: int):
     elif oper == "*":
         result = a * b
     elif oper == "/":
+        if b == 0:
+            await inter.send("Ошибка: деление на ноль.")
+            return
         result = a / b
     elif oper == "**":
         result = a ** b
@@ -111,7 +138,5 @@ async def calc(inter, a: int, oper: str, b: int):
         result = "Неверный оператор. Error 001"
 
     await inter.send(str(result))
-
-
 
 bot.run(token)
