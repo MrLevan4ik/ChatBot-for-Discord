@@ -22,5 +22,4 @@
 
 ## Контакты
 
-Тут добавь свои контакты
-[![FoxVuk (Зам. Владельца) - telegram](https://img.shields.io/badge/Telegram-FoxVuk-blue)](https://t.me/foxvuks_basement)
+[![FoxVuk (Зам. Владельца) - telegram](https://img.shields.io/badge/Telegram-FoxVuk-blue)](https://t.me/foxvuk_off)
