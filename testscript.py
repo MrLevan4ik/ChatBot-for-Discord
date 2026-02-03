@@ -1,3 +1,5 @@
+# Бот на disnake
+import disnake
 import disnake as ds
 from disnake.ext import commands
 
