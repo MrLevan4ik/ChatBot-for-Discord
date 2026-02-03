@@ -1,9 +1,14 @@
+<<<<<<< HEAD:src/bot.py
 from pathlib import Path
 
+=======
+>>>>>>> origin/main:testscript.py
 import disnake as ds
 from disnake.ext import commands
 
 from config import token
+
+VERSION = "3.2.2026_1"
 
 VERSION = "3.2.2026_1"
 
@@ -137,6 +142,7 @@ async def version(ctx):
     await ctx.send(f"Версия бота: {VERSION}")
 
 
+<<<<<<< HEAD:src/bot.py
 @bot.command(name="помощь")
 async def help_command(ctx):
     await ctx.send(
@@ -144,6 +150,8 @@ async def help_command(ctx):
     )
 
 
+=======
+>>>>>>> origin/main:testscript.py
 @bot.command(name="сумма", usage="sum <num1> <num2>")
 async def sum_numbers(ctx, num1, num2):
     try:
