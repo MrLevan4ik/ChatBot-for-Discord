@@ -3,6 +3,8 @@ from disnake.ext import commands
 
 from testdatabot import token
 
+VERSION = "3.2.2026_1"
+
 intents = ds.Intents.all()
 intents.message_content = True
 
@@ -119,6 +121,11 @@ async def data(ctx, * args):
 async def ping(ctx):
     latency_ms = round(bot.latency * 1000)
     await ctx.send(f"Pong! {latency_ms}ms")
+
+
+@bot.command(name="версия")
+async def version(ctx):
+    await ctx.send(f"Версия бота: {VERSION}")
 
 
 @bot.command(name="сумма", usage="sum <num1> <num2>")
