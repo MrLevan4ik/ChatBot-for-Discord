@@ -1,4 +1,3 @@
-import disnake
 import disnake as ds
 from disnake.ext import commands
 
@@ -7,7 +6,12 @@ from testdatabot import token
 intents = ds.Intents.all()
 intents.message_content = True
 
-bot = commands.Bot(command_prefix="!",help_command=None ,intents=disnake.Intents.all(), test_guilds=[1171730226741522432])
+bot = commands.Bot(
+    command_prefix="!",
+    help_command=None,
+    intents=intents,
+    test_guilds=[1171730226741522432],
+)
 
 
 
@@ -19,7 +23,7 @@ async def on_ready():
 @bot.event
 async def on_member_join(member):
     role = ds.utils.get(member.guild.roles, id=1201612717878935732)
-    channel = bot.get_channel(1171730227173523476) #member.guild.system_channel
+    channel = bot.get_channel(1171730227173523476)  # member.guild.system_channel
 
     embed = ds.Embed(
         title="Новый участник!",
@@ -28,7 +32,8 @@ async def on_member_join(member):
     )
 
     await member.add_roles(role)
-    await channel.send(embed=embed)
+    if channel is not None:
+        await channel.send(embed=embed)
 
 
 # Загружаем матерные слова из файлов
@@ -60,15 +65,23 @@ CENSORED_WORDS = load_censored_words()
 
 @bot.event
 async def on_message(message):
-    await bot.process_commands(message)
+    if message.author.bot:
+        return
 
     message_content = message.content.lower().split()
-    for word in message_content:
-        if word in CENSORED_WORDS:
-            try:
-                await message.delete()
-                await message.channel.send(f"{message.author.mention} не выражайся так, будь культурным!")
-                await bot.process_commands(message)
+    if any(word in CENSORED_WORDS for word in message_content):
+        try:
+            await message.delete()
+            await message.channel.send(
+                f"{message.author.mention} не выражайся так, будь культурным!"
+            )
+        except ds.Forbidden:
+            await message.channel.send(
+                f"{message.author.mention} не выражайся так, будь культурным!"
+            )
+        return
+
+    await bot.process_commands(message)
 
 
 @bot.event
@@ -83,23 +96,18 @@ async def on_command_error(ctx, error):
         ))
 
 
-#Команда для исключения пользователя
+# Команда для исключения пользователя
 @bot.command(name="кик", administrator=True)
 @commands.has_permissions(kick_members=True)
 async def kick(ctx, member: ds.Member, *, reason="Нарушение правил."):
     await member.kick(reason=reason)
 
 
-#Команда для бана пользователя
+# Команда для бана пользователя
 @bot.command(name="бан", administrator=True)
 @commands.has_permissions(ban_members=True)
 async def ban(ctx, member: ds.Member, *, reason="Нарушение правил."):
     await member.ban(reason=reason)
-
-
-@bot.command(name="жумайсынба")
-async def zhumaisinba(ctx):
-    await ctx.reply(f"Шампунь ЖУМАЙСЫНБА, скажи перхоти, я еб@л негров!")
 
 
 @bot.command()
@@ -107,12 +115,18 @@ async def data(ctx, * args):
     await ctx.reply(args)
 
 
+@bot.command(name="пинг")
+async def ping(ctx):
+    latency_ms = round(bot.latency * 1000)
+    await ctx.send(f"Pong! {latency_ms}ms")
+
+
 @bot.command(name="сумма", usage="sum <num1> <num2>")
-async def sum(ctx, num1, num2):
+async def sum_numbers(ctx, num1, num2):
     try:
         num1 = float(num1)
         num2 = float(num2)
-    except:
+    except ValueError:
         await ctx.send("Error")
         return
     result = num1 + num2
