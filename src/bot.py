@@ -1,7 +1,14 @@
+<<<<<<< HEAD:src/bot.py
+from pathlib import Path
+
+=======
+>>>>>>> origin/main:testscript.py
 import disnake as ds
 from disnake.ext import commands
 
-from testdatabot import token
+from config import token
+
+VERSION = "3.2.2026_1"
 
 VERSION = "3.2.2026_1"
 
@@ -41,8 +48,12 @@ async def on_member_join(member):
 # Загружаем матерные слова из файлов
 def load_censored_words():
     censored = set()
+    data_dir = Path(__file__).resolve().parent.parent / "data"
     try:
-        with open("swear-words-english.txt", "r", encoding="utf-8") as eng_file:
+        with (data_dir / "swear-words-english.txt").open(
+            "r",
+            encoding="utf-8",
+        ) as eng_file:
             for line in eng_file:
                 word = line.strip()
                 if word:
@@ -51,7 +62,10 @@ def load_censored_words():
         print("Файл swear-words-english.txt не найден.")
 
     try:
-        with open("swear-words-russian.txt", "r", encoding="utf-8") as rus_file:
+        with (data_dir / "swear-words-russian.txt").open(
+            "r",
+            encoding="utf-8",
+        ) as rus_file:
             for line in rus_file:
                 word = line.strip()
                 if word:
@@ -128,6 +142,16 @@ async def version(ctx):
     await ctx.send(f"Версия бота: {VERSION}")
 
 
+<<<<<<< HEAD:src/bot.py
+@bot.command(name="помощь")
+async def help_command(ctx):
+    await ctx.send(
+        "Команды: !пинг, !версия, !помощь, !сумма <num1> <num2>, /calc"
+    )
+
+
+=======
+>>>>>>> origin/main:testscript.py
 @bot.command(name="сумма", usage="sum <num1> <num2>")
 async def sum_numbers(ctx, num1, num2):
     try:
