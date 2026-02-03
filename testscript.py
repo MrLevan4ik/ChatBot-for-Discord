@@ -1,5 +1,3 @@
-# Бот на disnake
-import disnake
 import disnake as ds
 from disnake.ext import commands
 
@@ -115,6 +113,12 @@ async def ban(ctx, member: ds.Member, *, reason="Нарушение правил
 @bot.command()
 async def data(ctx, * args):
     await ctx.reply(args)
+
+
+@bot.command(name="пинг")
+async def ping(ctx):
+    latency_ms = round(bot.latency * 1000)
+    await ctx.send(f"Pong! {latency_ms}ms")
 
 
 @bot.command(name="сумма", usage="sum <num1> <num2>")
