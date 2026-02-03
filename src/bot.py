@@ -137,6 +137,13 @@ async def version(ctx):
     await ctx.send(f"Версия бота: {VERSION}")
 
 
+@bot.command(name="помощь")
+async def help_command(ctx):
+    await ctx.send(
+        "Команды: !пинг, !версия, !помощь, !сумма <num1> <num2>, /calc"
+    )
+
+
 @bot.command(name="сумма", usage="sum <num1> <num2>")
 async def sum_numbers(ctx, num1, num2):
     try:
